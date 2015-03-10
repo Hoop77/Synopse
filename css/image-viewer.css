@@ -1,0 +1,109 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400);
+
+.iv-img {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.iv-img.hover-off {
+	background: black;
+	opacity: 0;
+	transition: opacity 1s;
+}
+
+.iv-img.hover-on {
+	opacity: 0.4;
+	transition: opacity 1s;	
+}
+
+.iv-fullsize-icon {
+	background: url('../img/image-viewer/fullsize.png');
+	background-repeat: no-repeat;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -32px;
+	margin-left: -32px;
+	width: 64px;
+	height: 64px;
+}
+
+.iv-fullsize-img-container {
+	position: fixed;
+	z-index: 9000;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.8);
+	overflow: auto;
+}
+
+.iv-fullsize-img {
+	margin: 0 auto;
+	position: relative;
+	overflow: hidden;
+}
+
+.iv-icon-container {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.iv-icon {
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+	opacity: 0;
+}
+
+.iv-icon-close {
+	background: url('../img/image-viewer/close.png');
+}
+
+.iv-icon-info {
+	background: url('../img/image-viewer/info.png');	
+}
+
+.iv-icon.off {
+	opacity: 0;
+	transition: opacity 1s;
+}
+
+.iv-icon.on {
+	opacity: 0.5;
+	transition: opacity 1s;
+}
+
+.iv-icon.hover-on {
+	opacity: 1;
+	transition: opacity 1s;	
+}
+
+.iv-description {
+	position: absolute;
+	display: block;
+	right: 0;
+	margin: 36px 8px 0 8px;
+	max-width: 300px;
+	padding: 10px 12px 15px 12px;
+	border-radius: 5px;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 12pt;
+	text-align: center;
+	line-height: 150%;
+	overflow: hidden;
+	color: white;
+	background: rgba(0, 0, 0, 0.7);
+}
+
+.iv-description.off {
+	opacity: 0;
+	transition: opacity 0.5s;
+}
+
+.iv-description.on {
+	opacity: 1;
+	transition: opacity 0.5s;	
+}
