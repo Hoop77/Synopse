@@ -5,5 +5,7 @@ Dies ist ein Projekt des Kunst-Leistungskurses des Fontane Gymnasiums in Rangsdo
 Es geht darum einen Überblick über die Epochen der Kunsthistorik zu vermitteln.
 
 Beteiligte:
+
 Programmierung+Design: Philipp Badehnoop
+
 Content: Vanessa Retkowski, Lisa Wagner
