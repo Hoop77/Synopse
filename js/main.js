@@ -15,6 +15,7 @@ function viewport() {
 }
 
 parallax = new Parallax();
+
 parallax.add(new ParallaxObject($('#s-hero'), { init: "0%", range: "100%", value: "-70%" }, { init: "0.6", end: "0.2", range: "100%", value: "100%" }));
 parallax.add(new ParallaxObject($('.s-jumbotron .s-heading'), { init: "0%", range: "100%", value: "-30%" }, { init: "1", end: "0", range: "100%", value: "200%" }));
 

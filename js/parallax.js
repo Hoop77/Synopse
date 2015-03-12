@@ -2,36 +2,55 @@ function viewport() {
     var e = window, a = 'inner';
     if (!('innerWidth' in window )) {
         a = 'client';
-        e = document.documentElement || document.body;
+        e = document.documentel || document.body;
     }
     return { width : e[ a+'Width' ] , height : e[ a+'Height' ] };
 }
 
-function ParallaxObject(element, scrollData, opacityData) {
-	var element = element,
+function ParallaxObject(el, scrollData, opacityData) {
+	var _ = this;
 
-	// store input scroll data for later use
-	scrollDataInitTop = scrollData['init'],
-	scrollDataStepRange = scrollData['range'],
-	scrollDataStepValue = scrollData['value'],
-	// processed data
-	scrollInitTop = evaluateData(scrollDataInitTop),
-	scrollStepRange = evaluateData(scrollDataStepRange),
-	scrollStepValue = evaluateData(scrollDataStepValue),
-	scrollRatio = calcRatio(scrollStepRange, scrollStepValue),
+	init();
 
-	// store input opacity data for later use
-	opacityDataInit = opacityData['init'],
-	opacityDataEnd = opacityData['end'],
-	opacityDataStepRange = opacityData['range'],
-	opacityDataStepValue = opacityData['value'],
-	// processed data
-	opacityInit = opacityDataInit,
-	opacityEnd = opacityDataEnd,
-	opacityDiff = opacityInit - opacityEnd,
-	opacityStepRange = evaluateData(opacityDataStepRange),
-	opacityStepValue = evaluateData(opacityDataStepValue),
-	opacityRatio = calcRatio(opacityStepRange, opacityStepValue);	
+	function init() {
+		_.el = el;
+
+		if(scrollData != null) {
+			_.scrollEnabled = true;
+			 // store input scroll data for later use
+			_.scrollDataInitTop = scrollData['init'],
+			_.scrollDataStepRange = scrollData['range'],
+			_.scrollDataStepValue = scrollData['value'],
+
+			// processed data
+			_.scrollInitTop = evaluateData(_.scrollDataInitTop),
+			_.scrollStepRange = evaluateData(_.scrollDataStepRange),
+			_.scrollStepValue = evaluateData(_.scrollDataStepValue),
+			_.scrollRatio = calcRatio(_.scrollStepRange, _.scrollStepValue);
+		}
+		else {
+			_.scrollEnabled = false;
+		}
+
+		if(opacityData != null) {
+			_.opacityEnabled = true;
+			// store input opacity data for later use
+			_.opacityDataInit = opacityData['init'],
+			_.opacityDataEnd = opacityData['end'],
+			_.opacityDataStepRange = opacityData['range'],
+			_.opacityDataStepValue = opacityData['value'],
+			// processed data
+			_.opacityInit = _.opacityDataInit,
+			_.opacityEnd = _.opacityDataEnd,
+			_.opacityDiff = _.opacityInit - _.opacityEnd,
+			_.opacityStepRange = evaluateData(_.opacityDataStepRange),
+			_.opacityStepValue = evaluateData(_.opacityDataStepValue),
+			_.opacityRatio = calcRatio(_.opacityStepRange, _.opacityStepValue);	
+		}
+		else {
+			_.opacityEnabled = false;
+		}
+	}
 
 	function evaluateData(value) {
 		if(value.indexOf("px") != -1) {
@@ -65,19 +84,19 @@ function ParallaxObject(element, scrollData, opacityData) {
 	}
 
 	function calcTop() {
-		var newTop = scrollInitTop + getScrollTop() * scrollRatio;
-		element.css({top: newTop + "px"});
+		var newTop = _.scrollInitTop + getScrollTop() * _.scrollRatio;
+		el.css({top: newTop + "px"});
 	}
 
 	function calcOpacity() {
-		var scrollPos = getScrollTop() - scrollInitTop;
+		var scrollPos = getScrollTop() - _.scrollInitTop;
 		if(scrollPos >= 0) {
-			var factor =  (scrollPos / opacityStepRange) * opacityRatio;
-			var newOpacity = (opacityInit - (factor * opacityDiff));
-			element.css({opacity: newOpacity});		
+			var factor =  (scrollPos / _.opacityStepRange) * _.opacityRatio;
+			var newOpacity = (_.opacityInit - (factor * _.opacityDiff));
+			el.css({opacity: newOpacity});		
 		}
 		else {
-			element.css({opacity: opacityInit});
+			el.css({opacity: _.opacityInit});
 		}
 	}
 
@@ -86,11 +105,16 @@ function ParallaxObject(element, scrollData, opacityData) {
 		calcOpacity();
 		
 		$(window).resize(function() {
-			scrollInitTop = evaluateData(scrollDataInitTop);
-			scrollStepRange = evaluateData(scrollDataStepRange);
-			scrollStepValue = evaluateData(scrollDataStepValue);
-			opacityStepRange = evaluateData(opacityDataStepRange);
-			opacityStepValue = evaluateData(opacityDataStepValue);
+			if(_.scrollEnabled) {
+				_.scrollInitTop = evaluateData(_.scrollDataInitTop);
+				_.scrollStepRange = evaluateData(_.scrollDataStepRange);
+				_.scrollStepValue = evaluateData(_.scrollDataStepValue);
+			}
+			
+			if(_.opacityEnabled) {
+				_.opacityStepRange = evaluateData(_.opacityDataStepRange);
+				_.opacityStepValue = evaluateData(_.opacityDataStepValue);
+			}
 		});
 
 		$(window).scroll(function() {
