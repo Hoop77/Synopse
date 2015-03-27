@@ -106,8 +106,7 @@
 					$(this).removeClass("hover-on");
 				});
 				closeIcon.click(function() {
-					$(".iv-fullsize-img-container").remove();
-					$("body").css({"overflow" : "auto"});
+					close();
 				});
 
 				var description = $("<p></p>");
@@ -144,13 +143,18 @@
 				fullsizeImgContainer.mouseup(function(e) {
 					if(!fullsizeImg.is(e.target) &&
 						fullsizeImg.has(e.target).length === 0) {
-						$(".iv-fullsize-img-container").remove();
-						$("body").css({overflow : "auto"});
+						close();
 					}
+				});
+
+				$(document).keyup(function(e){
+					if(e.keyCode == 27) close();
 				});
 
 				fullsizeImgContainer.prepend(fullsizeImg);
 				$("body").prepend(fullsizeImgContainer);
+				$("body .iv-fullsize-img-container").show("slow");
+				show();
 			});
 
 			_.el.prepend(imgHover);
@@ -180,6 +184,17 @@
 			element.css({
 				"width"		: w + "px",
 				"height"	: h + "px"
+			});
+		}
+
+		function show() {
+			$("body .iv-fullsize-img-container").fadeIn("slow");
+		}
+
+		function close() {
+			$("body .iv-fullsize-img-container").fadeOut("slow", function() {
+				$(".iv-fullsize-img-container").remove();
+				$("body").css({"overflow" : "auto"});
 			});
 		}
 	}
