@@ -610,3 +610,11 @@ body {
 		display: none;
 	}
 }
+
+.content-selector {
+	position: fixed;
+	top: 0;
+	width: 200px;
+	height: 100vh;
+	z-index: 9999;
+}

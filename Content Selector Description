@@ -1,0 +1,37 @@
+---------------------------------------------------------------
+Content Selector Description
+---------------------------------------------------------------
+
+Positionierung
+	- default vertikale Zentrierung
+	- default 50 margin left
+	- einstllbar
+
+Features / Effekte
+	- nur eine Content Ebene
+	- aufklappbar
+	- aktuelles Element hervorgehoben
+
+Aufgaben
+	- Erkennung des aktuellen Contents (Id)
+	- Jump zum ausgewählten Content (Id)
+
+Input
+	- Content IDs
+		- content-id (arg)
+		- content-count (arg)
+	- Content Überschrift
+		- content-heading (data tag of element)
+	- Optionen
+		- margin left
+
+States
+	- "fold"
+	- "unfold"
+
+Animationen
+	- zwischen "fold" und "unfold"
+
+Dateien
+	- contentSelector.js
+	- contentSelector.css

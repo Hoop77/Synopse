@@ -29,6 +29,7 @@ function scrollTo(element){
 };
 
 $('.image-viewer').imageViewer();
+$('.content-selector').contentSelector("content", 3, "content-heading", { });
 
 $('.s-main .s-content .s-container > .s-slider').unslider({
 	speed		: 1000,
@@ -93,5 +94,5 @@ $(function() {
             $('.s-header .s-menu nav').css({"display" : "none"});   
             $(menuItem + ' ul').hide();   
         }
-    });    
+    });
 });

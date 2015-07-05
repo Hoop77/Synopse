@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="css/image-viewer.css">
+    <link rel="stylesheet" href="css/content-selector.css">
     <link rel="stylesheet" href="css/main.css">
 
     <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
@@ -21,6 +22,7 @@
     <script src="js/parallax.js"></script>
     <script src="js/dynamicHeader.js"></script>
     <script src="js/imageViewer.js"></script>
+    <script src="js/contentSelector.js"></script>
     <script src="js/unslider.js"></script>
 </head>
 <body>
@@ -89,7 +91,7 @@
   </section>
 
   <div class="s-main">
-    <article id="content-1" class="s-content">
+    <article id="content-1" class="s-content" data-content-heading="Geometrischer Stil">
       <div class="s-container">
         <div class="slider-arrow prev"></div>
         <div class="slider-arrow next"></div>
@@ -144,7 +146,7 @@
       </div>
     </article>
       
-    <article id="content-2" class="s-content">
+    <article id="content-2" class="s-content" data-content-heading="Archaischer Stil">
       <div class="s-container">
         <div class="slider-arrow prev"></div>
         <div class="slider-arrow next"></div>
@@ -197,7 +199,7 @@
       </div>
     </article>
 
-    <article id="content-3" class="s-content">
+    <article id="content-3" class="s-content" data-content-heading="Klassischer Stil">
       <div class="s-container">
         <div class="slider-arrow prev"></div>
         <div class="slider-arrow next"></div>
@@ -259,6 +261,8 @@
       </div>
     </div>
   </footer>
+
+  <div class="content-selector"></div>
 
 <script src="js/main.js"></script>
 

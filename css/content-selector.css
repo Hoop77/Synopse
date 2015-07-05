@@ -1,0 +1,67 @@
+/* content-selector.css */
+
+.cs-container {
+	height: 100%;
+}
+
+.cs-main { }
+
+.cs-main ul {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+}
+
+.cs-main li { }
+
+.cs-main .cs-symbol {
+	margin: 0;
+	position: relative;
+  	top: 50%;
+	-webkit-transform: translateY(-50%);
+  	-ms-transform: translateY(-50%);
+  	-moz-transform: translateY(-50%);
+  	transform: translateY(-50%);
+}
+
+.cs-main .cs-heading {
+	margin: 0;
+	position: relative;
+  	top: 50%;
+	-webkit-transform: translateY(-50%);
+  	-ms-transform: translateY(-50%);
+  	-moz-transform: translateY(-50%);
+  	transform: translateY(-50%);
+}
+
+.cs-v-center {
+	position: relative;
+  	top: 50%;
+	-webkit-transform: translateY(-50%);
+  	-ms-transform: translateY(-50%);
+  	-moz-transform: translateY(-50%);
+  	transform: translateY(-50%);
+}
+
+.cs-v-top {
+	position: absolute;
+	top: 0;
+}
+
+.cs-v-bottom {
+	position: absolute;
+	bottom: 0;	
+}
+
+.cs-h-centered {
+	text-align: center;
+}
+
+.cs-h-left {
+	text-align: left;
+}
+
+.cs-h-right {
+	text-align: right;
+}

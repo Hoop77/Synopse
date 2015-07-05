@@ -209,8 +209,8 @@
 				key = 'image-viewer' + (len > 1 ? '-' + ++index : ''),
 				instance = (new ImageViewer).init(me, opts);
 
-			// invoke an ImageViewer instance
-			me.data(key, instance).data('key', key);
+			// set a key to each instance
+			me.data('key', key);
 		});
 	}
 
