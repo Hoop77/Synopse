@@ -613,6 +613,7 @@ body {
 
 .content-selector {
 	position: fixed;
+	left: 10px;
 	top: 0;
 	width: 200px;
 	height: 100vh;

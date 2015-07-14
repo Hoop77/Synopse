@@ -1,32 +1,33 @@
 /* content-selector.css */
 
-.cs-container {
-	height: 100%;
-}
-
 .cs-main { }
 
-.cs-main ul {
-	list-style-type: none;
-	padding: 0;
-	margin: 0;
-	width: 100%;
-}
-
-.cs-main li { }
-
 .cs-main .cs-symbol {
-	margin: 0;
+	/* set width in js */
+	float: left;
 	position: relative;
   	top: 50%;
 	-webkit-transform: translateY(-50%);
   	-ms-transform: translateY(-50%);
   	-moz-transform: translateY(-50%);
   	transform: translateY(-50%);
+  	font-size: 16pt;
+  	margin-top: -2px;
 }
+
+.cs-main ul {
+	/* set width in js */
+	float: left;
+	list-style-type: none;
+	padding: 0;
+	margin: 0;	
+}
+
+.cs-main li { }
 
 .cs-main .cs-heading {
 	margin: 0;
+	cursor: pointer;
 	position: relative;
   	top: 50%;
 	-webkit-transform: translateY(-50%);
@@ -54,7 +55,7 @@
 	bottom: 0;	
 }
 
-.cs-h-centered {
+.cs-h-center {
 	text-align: center;
 }
 

@@ -1,10 +1,10 @@
 // --------------------------------------------------------------------------------------
 // HTML Layout
 /*
-	<div class="cs-main cs-container">
+	<div class="cs-main>
+		<div class="cs-symbol"></div>
 		<ul>
 			<li>
-				<div class="cs-symbol"></div>
 				<div class="cs-heading"></div>
 			</li>
 		</ul>
@@ -20,69 +20,132 @@
 
 		_.opts = 
 		{
-			hAlgin 		: "left",
-			vAlign 		: "center",
-			elHeight	: 50
+			hAlign 			: "left",
+			vAlign 			: "top",
+			symbolWidth		: 20,
+			elHeight		: 50,
+			stepsShown		: 3
 		};
 
 		_.init = function(el, contentId, contentCount, contentHeadingAttr, opts) 
 		{
+			// setting members
 			_.el = el;
 			_.contentId = contentId;  
 			_.contentCount = contentCount;
 			_.contentHeadingAttr = contentHeadingAttr;
 			_.opts = $.extend(_.opts, opts);
 
+			// calculate total height
+			_.totalHeight = _.opts.elHeight * (2 * _.opts.stepsShown - 1);	// calculate total height
+			_.totalWidth = _.el.width();
+
 			setUpHtml();
+			setUpOffsets();
+			
+			updateOpacity();
+
+			setTopOffset(-0);
+			updateOpacity();
 		}
 
 		function setUpHtml()
 		{
-			var contentElements = [];
+			_.contentElements = [];		// store li elements
 
 			// main
 			var main = $("<div></div>");
 			main.addClass("cs-main");
-			main.addClass("cs-container");
+			main.css({ height : _.totalHeight + "px" });		// set total height
+
+			// horizontal align
+			if(_.opts.hAlign == "right") main.addClass("cs-h-right"); 
+			else if (_.opts.hAlign == "center") main.addClass("cs-h-center"); 
+			else main.addClass("cs-h-left");
+
+			// vertical align
+			if(_.opts.vAlign == "bottom") main.addClass("cs-v-bottom"); 
+			else if (_.opts.vAlign == "center") main.addClass("cs-v-center");
+			else main.addClass("cs-v-top");
 
 			// ul
-			var ul = $("<ul></ul>");
-			ul.css( {height : _.opts.elHeight * _.contentCount + "px"});
+			_.ul = $("<ul></ul>");
 
+			// loop through every element
 			for(var i = 0; i < _.contentCount; i++) 
 			{
 				// li
 				var li = $("<li></li>");
-				li.css( {height : _.opts.elHeight + "px"} );
+				li.css({ height : _.opts.elHeight + "px" });
 
-				// symbol
-				var symbol = $("<span></span>");
-				symbol.addClass("cs-symbol");
 				// heading
 				var heading = $("<div></div>");
 				heading.addClass("cs-heading");
 
 				// add heading text
-				var headingText = $("#" + _.contentId + "-" + (i + 1)).data(_.contentHeadingAttr);
+				var headingText = $("#" + _.contentId + "-" + (_.contentCount - i)).data(_.contentHeadingAttr);
 				
 				heading.append(headingText);
 
 				li.prepend(heading);
-				li.prepend(symbol);
 
-				ul.prepend(li);
+				_.ul.prepend(li);
+
+				_.contentElements.unshift(li);
 			}
 
-			main.prepend(ul);
+			_.ul.css({ width : (_.totalWidth - _.opts.symbolWidth) + "px" });	// calculate rest width
+
+			main.prepend(_.ul);
+
+			// symbol
+			var symbol = $("<div></div>");
+			symbol.addClass("cs-symbol");
+			symbol.css({ width : _.opts.symbolWidth + "px" });	// set symbol width
+			symbol.append("&#9656;");							// kind of selection character
+			main.prepend(symbol);
 
 			_.el.prepend(main);
+
+			_.initTop = _.ul.offset().top;
+		}
+
+		function setUpOffsets()
+		{
+			_.initMarginTopOffset = _.opts.elHeight * (_.opts.stepsShown - 1);	// calculate offset for first element
+			setTopOffset(0);
+			_.posCenter = _.initTop + _.initMarginTopOffset;			// calculate center position
+		}
+
+		function setTopOffset(offset)
+		{
+			_.ul.css({ "margin-top" : (_.initMarginTopOffset + offset) + "px" });
+		}
+
+		function updateOpacity () {
+			for(var i = 0; i < _.contentCount; i++)
+			{
+				var element = _.contentElements[i];
+				var topOffset = _.posCenter - element.offset().top;	// how far the top of element is away from the center
+				var opacity = 1.0;
+
+				console.log("center: " + _.posCenter);
+				console.log("topOffset: " + topOffset);
+				console.log(_.currentMarginTopOffset);
+
+				if(topOffset >= 0)
+					opacity = 1 - (topOffset / (_.totalHeight / 2) );	// topOffset positive 
+				else
+					opacity = 1 - (-topOffset / (_.totalHeight / 2) );	// topOffset negative
+				
+				element.css({ opacity : opacity });
+			}
 		}
 
 		function setUpUpdate()
 		{
 			$(window).resize( function() 
 			{
-
 			} );
 		}
 	}

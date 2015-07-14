@@ -19,7 +19,7 @@ parallax = new Parallax();
 parallax.add(new ParallaxObject($('#s-hero'), { init: "0%", range: "100%", value: "-70%" }, { init: "0.6", end: "0.0", range: "100%", value: "100%" }));
 parallax.add(new ParallaxObject($('.s-jumbotron .s-heading'), { init: "0%", range: "100%", value: "-30%" }, { init: "1", end: "0", range: "100%", value: "200%" }));
 
-function scrollTo(element){
+function scrollTo(element) {
     if(viewport()['width'] <= 850) {
         $('html, body').animate({ scrollTop: ($(element).offset().top - 72) }, 'slow');
     }
@@ -28,8 +28,13 @@ function scrollTo(element){
     }
 };
 
+$('.s-btn').click(function() {
+    var target = $(this).data("click-target");
+    scrollTo($(target));
+});
+
 $('.image-viewer').imageViewer();
-$('.content-selector').contentSelector("content", 3, "content-heading", { });
+$('.content-selector').contentSelector("content", 3, "content-heading", { hAlign : "left", vAlign : "center" });
 
 $('.s-main .s-content .s-container > .s-slider').unslider({
 	speed		: 1000,
