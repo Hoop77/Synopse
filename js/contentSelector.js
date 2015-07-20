@@ -1,19 +1,117 @@
-// --------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------
 // HTML Layout
-/*
-	<div class="cs-main>
-		<div class="cs-symbol"></div>
-		<ul>
-			<li>
-				<div class="cs-heading"></div>
-			</li>
-		</ul>
-	</div>
-*/		
-// --------------------------------------------------------------------------------------
+//
+//	<div class="cs-main>
+//		<div class="cs-symbol"></div>
+//		<ul>
+//			<li>
+//				<div class="cs-heading"></div>
+//			</li>
+//		</ul>
+//	</div>
+//		
+//-----------------------------------------------------------------------------------------------------
+
+
+//-----------------------------------------------------------------------------------------------------
+// example with 3 steps:
+//
+//	position		state0	state1	state2		opactiy
+//  --------        ------  ------	------		-------
+//
+//	-2								el0
+//	-1						el0		el1
+//  0 (center)		el0		el1		el2			100%
+//	1				el1		el2					
+//	2				el2
+//
+//-----------------------------------------------------------------------------------------------------
 
 ( function($) 
 {
+	var OffsetController = function()
+	{
+		var _ = this;
+
+		_.init = null;
+		_.curr = null;
+		_.onValueChangeEvent = null;
+		_.range = 
+		{ 
+			min : Number.MIN_VALUE,
+			max : Number.MAX_VALUE
+		};
+
+		_.setInitValue = function( initValue )
+		{
+			_.init = initValue;														// set init value
+			if(_.curr == null) _.curr = initValue;									// set also curr if not initialized yet
+		}
+
+		// simply sets the current value to the input value
+		_.setCurrentValue = function( currentValue )
+		{
+			// update current value
+			_.curr = currentValue;
+
+			callOnValueChangeEvent();
+		}
+
+		// sets the current value to the addition of init and the input value
+		_.updateCurrentValue = function( updateValue )
+		{
+			_.curr = _.init + updateValue;
+
+			callOnValueChangeEvent
+		}
+
+		_.setRange = function( min, max )
+		{
+			_.range.min = min;
+			_.range.max = max;
+		}
+
+		_.getInitValue = function()
+		{
+			return _.init;
+		}
+
+		_.getCurrentValue = function()
+		{
+			return _.curr;
+		}
+
+		// returns the distance between init and curr
+		// example: init = 20, curr = -30
+		// 			--> returns -50
+		_.getDistance = function()
+		{
+			return ( _.curr - _.init );
+		}
+
+		// returns a range between 0 and 1 if distance is between range.min and range.max
+		// example: min = -100, max = 100, curr = 50
+		// 			--> returns 0.75 
+		_.getRange = function()
+		{
+			var minToVal = _.getDistance() - _.range.min;
+			var minToMax = _.range.max - _.range.min;
+			return minToVal / minToMax;
+		}
+
+		_.bindOnValueChangeEvent = function( ev )
+		{
+			_.onValueChangeEvent = ev;
+		}
+
+		function callOnValueChangeEvent()
+		{
+			// trigger set event
+			if( _.onValueChangeEvent != null )
+				_.onValueChangeEvent( _ );
+		}
+	}
+
 	var ContentSelector = function() 
 	{
 		var _ = this;
@@ -24,39 +122,37 @@
 			vAlign 			: "top",
 			symbolWidth		: 20,
 			elHeight		: 50,
-			stepsShown		: 3
+			steps			: 3																							// how many elements should be displayed by default at a time
 		};
 
 		_.init = function(el, contentId, contentCount, contentHeadingAttr, opts) 
 		{
+			//
 			// setting members
+			//
 			_.el = el;
 			_.contentId = contentId;  
 			_.contentCount = contentCount;
 			_.contentHeadingAttr = contentHeadingAttr;
 			_.opts = $.extend(_.opts, opts);
 
-			// calculate total height
-			_.totalHeight = _.opts.elHeight * (2 * _.opts.stepsShown - 1);	// calculate total height
-			_.totalWidth = _.el.width();
-
+			//
+			// setup functions
+			//
 			setUpHtml();
-			setUpOffsets();
+			//setUpDimensionsAndOffsets();
 			
-			updateOpacity();
-
-			setTopOffset(-0);
-			updateOpacity();
+			//updateOpacity();
 		}
 
 		function setUpHtml()
 		{
-			_.contentElements = [];		// store li elements
+			_.contentElements = [];																						// store li elements
 
 			// main
 			var main = $("<div></div>");
 			main.addClass("cs-main");
-			main.css({ height : _.totalHeight + "px" });		// set total height
+			main.css({ height : _.totalHeight + "px" });																// set total height
 
 			// horizontal align
 			if(_.opts.hAlign == "right") main.addClass("cs-h-right"); 
@@ -82,63 +178,78 @@
 				var heading = $("<div></div>");
 				heading.addClass("cs-heading");
 
-				// add heading text
+				// add heading text and append to heading element
 				var headingText = $("#" + _.contentId + "-" + (_.contentCount - i)).data(_.contentHeadingAttr);
-				
 				heading.append(headingText);
 
+				// li.heading
 				li.prepend(heading);
 
+				// ul.li
 				_.ul.prepend(li);
 
-				_.contentElements.unshift(li);
+				_.contentElements.unshift(li);																			// pushes element to first position in array
 			}
 
-			_.ul.css({ width : (_.totalWidth - _.opts.symbolWidth) + "px" });	// calculate rest width
+			_.ul.css({ width : (_.totalWidth - _.opts.symbolWidth) + "px" });											// calculate rest width
 
 			main.prepend(_.ul);
 
 			// symbol
 			var symbol = $("<div></div>");
 			symbol.addClass("cs-symbol");
-			symbol.css({ width : _.opts.symbolWidth + "px" });	// set symbol width
-			symbol.append("&#9656;");							// kind of selection character
+			symbol.css({ width : _.opts.symbolWidth + "px" });															// set symbol width
+			symbol.append("&#9656;");																					// kind of selection character
+
+			// main.symbol
 			main.prepend(symbol);
 
+			// el.main
 			_.el.prepend(main);
-
-			_.initTop = _.ul.offset().top;
 		}
 
-		function setUpOffsets()
+		function setUpDimensionsAndOffsets()
 		{
-			_.initMarginTopOffset = _.opts.elHeight * (_.opts.stepsShown - 1);	// calculate offset for first element
-			setTopOffset(0);
-			_.posCenter = _.initTop + _.initMarginTopOffset;			// calculate center position
+			//
+			// total width and height
+			//
+			_.totalHeight = _.opts.elHeight * (2 * _.opts.steps - 1);													// calculate total height
+			_.totalWidth = _.el.width();
+
+			//
+			// offsets
+			//
+			var initMarginTop 	= _.opts.elHeight * (_.opts.steps - 1);													// init margin that has to be set to center the first element
+			var initPositionTop = _.ul.offset().top;																	// init top position of ul element
+
+			_.marginTopController = new OffsetController();																// controller to set the ul margin top value to move all elements up and down
+			_.marginTopController.setInitValue( initMarginTop );														// set initial value
+			_.marginTopController.bindOnValueChangeEvent( setUlMarginTop );												// bind function to control css attribute of ul element (margin-top)
+			_.marginTopController.updateCurrentValue( 0 );																// activate
+
+			_.positionController = new OffsetController();																// controller to control the position and calculate the corresponding opacity
+			_.positionController.setInitValue( initMarginTop + initPositionTop );										// set init value to inital center position of content selector
+			_.positionController.bindOnValueChangeEvent( setElementOpacity );											// bind function to control css attribute of li element (opacity)
+			_.positionController.setRange( 0, ( _.totalHeight / 2 ) );													// range origin is in the center --> total height / 2
 		}
 
-		function setTopOffset(offset)
+		function setUlMarginTop( controller )
 		{
-			_.ul.css({ "margin-top" : (_.initMarginTopOffset + offset) + "px" });
+			_.ul.css({ "margin-top" : controller.getCurrentValue() + "px" });
 		}
 
-		function updateOpacity () {
+		function setElementOpacity( controller )
+		{
+			var opacity = Math.abs( controller.getRange() );
+			_.currElement.css({ opacity : opacity });		
+		}
+
+		function updateOpacity() 
+		{
 			for(var i = 0; i < _.contentCount; i++)
 			{
-				var element = _.contentElements[i];
-				var topOffset = _.posCenter - element.offset().top;	// how far the top of element is away from the center
-				var opacity = 1.0;
-
-				console.log("center: " + _.posCenter);
-				console.log("topOffset: " + topOffset);
-				console.log(_.currentMarginTopOffset);
-
-				if(topOffset >= 0)
-					opacity = 1 - (topOffset / (_.totalHeight / 2) );	// topOffset positive 
-				else
-					opacity = 1 - (-topOffset / (_.totalHeight / 2) );	// topOffset negative
-				
-				element.css({ opacity : opacity });
+				_.currElement = _.contentElements[i];
+				_.positionController.setCurrentValue( _.currElement.offset().top );
 			}
 		}
 
