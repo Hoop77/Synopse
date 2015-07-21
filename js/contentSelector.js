@@ -89,14 +89,16 @@
 			return ( _.curr - _.init );
 		}
 
-		// returns a range between 0 and 1 if distance is between range.min and range.max
+		// returns a value in range between 0 and 1 if distance of the current and init value 
+		// is between range.min and range.max
 		// example: min = -100, max = 100, curr = 50
 		// 			--> returns 0.75 
-		_.getRange = function()
+		_.getDistanceInRange = function()
 		{
-			var minToVal = _.getDistance() - _.range.min;
+			var minToDist = _.getDistance() - _.range.min;
 			var minToMax = _.range.max - _.range.min;
-			return minToVal / minToMax;
+			if( minToMax == 0 ) return 0;																					// protect against division with 0			
+			return minToDist / minToMax;
 		}
 
 		_.bindOnValueChangeEvent = function( ev )
@@ -240,7 +242,7 @@
 
 		function setElementOpacity( controller )
 		{
-			var opacity = Math.abs( controller.getRange() );
+			var opacity = Math.abs( controller.getDistanceInRange() );
 			_.currElement.css({ opacity : opacity });		
 		}
 
