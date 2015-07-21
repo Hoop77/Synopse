@@ -142,9 +142,9 @@
 			// setup functions
 			//
 			setUpHtml();
-			//setUpDimensionsAndOffsets();
+			setUpDimensionsAndOffsets();
 			
-			//updateOpacity();
+			updateOpacity();
 		}
 
 		function setUpHtml()
