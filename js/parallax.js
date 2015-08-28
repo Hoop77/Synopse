@@ -1,12 +1,3 @@
-function viewport() {
-    var e = window, a = 'inner';
-    if (!('innerWidth' in window )) {
-        a = 'client';
-        e = document.documentel || document.body;
-    }
-    return { width : e[ a+'Width' ] , height : e[ a+'Height' ] };
-}
-
 function ParallaxObject(el, scrollData, opacityData) {
 	var _ = this;
 
@@ -137,3 +128,51 @@ function Parallax() {
 		}
 	}
 }
+
+( function( $ )
+{
+	var Parallax = function()
+	{
+		var _ = this;
+
+		_.opts = 
+		{
+			scrollData :
+			{
+
+			}
+
+			opacityData :
+			{
+				
+			}
+		}
+
+		_.init = function( el, opts )
+		{
+			_.el = el;
+			_.opts.extends( opts );
+		}
+	}
+
+	//
+	// register as jQuery funtion
+	//
+	$.fn.parallax = function( el, opts )
+	{
+		var len = this.length;
+
+		return this.each( function( index )
+		{
+			var me = $( this )
+				key = "parralax" + ( len > 1 ? '-' + ++index : '' ),
+				instance = ( new Parallax ).init( 
+					me,
+					opts 
+				);
+
+			me.data( 'key', key );
+		} );
+	}
+}
+)( jQuery );

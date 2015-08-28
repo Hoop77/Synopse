@@ -27,7 +27,7 @@
 //
 //-----------------------------------------------------------------------------------------------------
 
-( function($) 
+( function( $ ) 
 {
 	var OffsetController = function()
 	{
@@ -367,7 +367,7 @@
 				return;
 			}
 
-			var currScroll = $( window ).scrollTop() + ( $( window ).height() / 2 );	// center of viewport
+			var currScroll = $( window ).scrollTop() + ( viewport()['height'] / 2 );	// center of viewport
 			var resultIndex = 0;
 
 			for( var i = 1; i < _.contentCount; i++ )
