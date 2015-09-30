@@ -144,42 +144,43 @@
 			//
 			// setting members
 			//
-			_.el = el;
+			_.main = el;
 			_.contentIdStr = contentIdStr;  
 			_.contentCount = contentCount;
 			_.contentHeadingAttr = contentHeadingAttr;
-			_.opts = $.extend(_.opts, opts);
+			_.opts = $.extend( _.opts, opts );
 
 			//
 			// total width and height
 			//
 			_.totalHeight = _.opts.elHeight * (2 * _.opts.steps - 1);				// calculate total height
-			_.totalWidth = _.el.width();
+			_.totalWidth = _.main.width();
 
 			//
 			// setup functions
 			//
-			setUpHtml();				// dom elements
-			setUpOffsets();				// offset controllers
+			setupHtml();				// dom elements
+			setupOffsets();				// offset controllers
 
 			_.activeElementIndex = 0;	// index of element which is in the center of the selection
 			_.activeOffset = 0;			// offset of the elements (value "0" means element with index 0 is in the center)
 
 			_.scrollingToHeading = false;
 
-			setUpUpdate();				// configures events
+			setupUpdate();				// configures events
+
+			return _;
 		}
 
 		//
 		// set up dom elements
 		//
-		function setUpHtml()
+		function setupHtml()
 		{
 			// store li elements
 			_.contentElements = [];
 
 			// main
-			_.main = $( "<div></div>" );
 			_.main.addClass( "cs-main" );
 			_.main.css({ height : _.totalHeight + "px" });	// set total height
 
@@ -221,8 +222,6 @@
 				_.contentElements.unshift( li );		// pushes element to first position in array
 			}
 
-			_.ul.css({ width : ( _.totalWidth - _.opts.symbolWidth ) + "px" });		// calculate rest width
-
 			_.main.prepend( _.ul );
 
 			// symbol
@@ -233,15 +232,12 @@
 
 			// main.symbol
 			_.main.prepend( symbol );
-
-			// el.main
-			_.el.prepend( _.main );
 		}
 
 		//
 		// setting up offset controllers
 		//
-		function setUpOffsets()
+		function setupOffsets()
 		{
 			//
 			// offsets
@@ -357,7 +353,7 @@
 		//
 		// sets the current selected element to the heading currently displayed in the document
 		//
-		function trackHeadings()
+		_.trackHeadings = function()
 		{
 			//
 			// if already scrolling to element don't do anything
@@ -392,17 +388,22 @@
 			}
 		}
 
+		_.refresh = function()
+		{
+			_.marginTopController.updateCurrentValue( _.activeOffset );		// change positions
+		}
+
 		//
 		// set up all interaction functionalities
 		//
-		function setUpUpdate()
+		function setupUpdate()
 		{
 			//
 			// window resized
 			//
 			$(window).resize( function() 
 			{
-				trackHeadings();
+				_.trackHeadings();
 			} );
 
 			//
@@ -410,7 +411,7 @@
 			//
 			$(window).scroll(function()
 			{
-				trackHeadings();
+				_.trackHeadings();
 			} );
 
 			//
@@ -441,9 +442,9 @@
 	}
 
 	//
-	// register as jQuery funtion
+	// register as jQuery function
 	//
-	$.fn.contentSelector = function(contentIdStr, contentCount, contentHeadingAttr, opts)
+	$.fn.contentSelector = function( contentIdStr, contentCount, contentHeadingAttr, opts )
 	{
 		var len = this.length;
 
@@ -457,7 +458,7 @@
 														 contentHeadingAttr, 
 														 opts );
 
-			me.data( 'key', key );
+			me.data( key, instance ).data( 'key', key );
 		} );
 	}
 } 

@@ -5,7 +5,7 @@
 .cs-main .cs-symbol {
 	/* set width in js */
 	float: left;
-	position: relative;
+	position: absolute;
   	top: 50%;
 	-webkit-transform: translateY(-50%);
   	-ms-transform: translateY(-50%);
@@ -19,7 +19,7 @@
 	/* set width in js */
 	float: left;
 	list-style-type: none;
-	padding: 0;
+	padding: 0 0 0 20px;
 	margin: 0;	
 }
 
@@ -46,12 +46,12 @@
 }
 
 .cs-v-top {
-	position: absolute;
+	position: relative;
 	top: 0;
 }
 
 .cs-v-bottom {
-	position: absolute;
+	position: relative;
 	bottom: 0;	
 }
 

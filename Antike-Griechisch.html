@@ -6,27 +6,38 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title></title>
+    <title>Synopse</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+<!-- 
+STYLES
+ -->
     <link rel="stylesheet" href="css/image-viewer.css">
     <link rel="stylesheet" href="css/content-selector.css">
+    <link rel="stylesheet" href="css/parallax.css">
+    <link rel="stylesheet" href="css/clipper.css">
     <link rel="stylesheet" href="css/main.css">
 
+<!-- 
+SCRIPTS
+ -->
     <script src="js/base.js"></script>
-    <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    <script src="js/menu.js"></script>
     <script src="js/jquery-1.11.2.min.js"></script>
-    <script src="js/vendor/bootstrap.min.js"></script>
     <script src="js/parallax.js"></script>
+    <script src="js/fading.js"></script>
     <script src="js/dynamicHeader.js"></script>
     <script src="js/imageViewer.js"></script>
     <script src="js/contentSelector.js"></script>
+    <script src="js/clipper.js"></script>
     <script src="js/unslider.js"></script>
+
 </head>
 <body>
+<!-- 
+HEADER
+ -->
   <div class="s-header-wrapper">
     <header class="s-header">
       <div class="s-container">
@@ -76,10 +87,22 @@
     </header>
   </div>
 
+<!-- 
+JUMBOTRON
+ -->
   <section class="s-jumbotron">
-    <div id="s-hero">
-      <div class="bgr-antike-griechisch hero-bgr"></div>
-    </div>
+    <div  class="s-hero-bgr fading"
+          data-fading-start-position="0vh"
+          data-fading-end-position="100vh"
+          data-fading-start-value="0.4"
+          data-fading-end-value="1"
+          data-fading-positioning="absolute"></div>
+
+    <div  class="s-hero parallax" 
+          data-parallax-img-src="img/bgr/Antike-Griechisch.jpg"
+          data-parallax-height="100vh"
+          data-parallax-speed="0.3"></div>
+
     <div class="s-heading">
       <div class="wrapper">
         <div class="s-container">
@@ -91,6 +114,9 @@
     </div>
   </section>
 
+<!-- 
+MAIN
+ -->
   <div class="s-main">
     <article id="content-1" class="s-content" data-content-heading="Geometrischer Stil">
       <div class="s-container">
@@ -252,21 +278,41 @@
         </div>  
       </div>
     </article>
-
   </div>
+
+<!-- 
+FOOTER
+-->
   <footer id="footer" class="s-footer">
     <div class="wrapper">
       <div class="s-container">
-        <a href="Antike-Römisch.html"><h1>&#8594; RÖMISCHE ANTIKE &#8592;</h1></a>
-        <h2>Weiter zur nächsten Epoche.</h2>
+        <a href="Antike-Römisch.html">
+          <h1>RÖMISCHE<br>ANTIKE</h1>
+        </a>
+        <!-- &#8594; -->
+        <h2><br>Weiter zur nächsten Epoche.<br><br></h2>
       </div>
     </div>
   </footer>
 
-<!--
-  <div class="content-selector"></div>
--->
+<!-- 
+EXTRA STUFF
+ -->
+  <div class="clipper clipper-main">
+    <div class="clipper-collapsed">
+      <div class="clipper-dots"></div>
+    </div>
+    <div class="clipper-extended">
+      <div class="clipper-x"></div>
+      <div class="clipper-content">
+        <div class="content-selector"></div> 
+      </div>
+    </div>
+  </div>
 
+<!-- 
+FINAL SCRIPTS
+ -->
 <script src="js/main.js"></script>
 
 </body>

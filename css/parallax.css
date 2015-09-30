@@ -1,0 +1,12 @@
+.parallax-container {
+	/*
+	 * may be custom already
+	*/
+}
+
+.parallax-parallax {
+	width: 100%;
+	position: fixed;
+	z-index: -1;
+	background-position: center top;
+}

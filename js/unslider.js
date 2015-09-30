@@ -29,7 +29,8 @@
 			item: '>li',    // slidable items selector
 			easing: 'swing',// easing function to use for animation
 			autoplay: false,  // enable autoplay on initialisation
-			responsive: 850
+			responsive: 850,
+			defaultHeight: 700
 		};
 
 		_.init = function(el, o) {
@@ -114,8 +115,10 @@
 							height = 0,
 							width = el.outerWidth();
 
-						if(viewport()['width'] <= responsive) {
-							li.each(function() {
+						if(viewport()['width'] <= responsive) 
+						{
+							li.each(function() 
+							{
 								height += $(this).outerHeight();
 							});
 
@@ -123,11 +126,12 @@
 							_.ul.css({  height : height, width : "100%",
 										left : "0"});
 						}
-						else {
-							height = _.max[1];
+						else 
+						{
+							height = _.o.defaultHeight;
 							
-							_.el.css({ height : height });
-							_.ul.css({ height : height, width : _.li.length * 100 + "%" });
+							_.el.css({ height : height + "px" });
+							_.ul.css({ height : height + "px", width : _.li.length * 100 + "%" });
 						}
 
 						el.css({width : 

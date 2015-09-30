@@ -14,8 +14,19 @@
    custom styles
    ========================================================================== */
 
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+html {
+    overflow-y: scroll;
+}
+
 body {
 	font-family: 'Open Sans', sans-serif;
+	-ms-overflow-style: scrollbar !important;
 }
 
 .s-container {
@@ -67,6 +78,7 @@ body {
 	padding: 10px 20px;
 	font-size: 12pt;
 	font-weight: bold;
+	font-family: 'Open Sans', sans-serif;
 	transition: background 0.5s;
 }
 
@@ -103,14 +115,21 @@ body {
 	color: white;
 }
 
+.s-header a {
+	color: white;
+	text-decoration: none;
+}
+
 .s-header .s-container {
+	width: 100%;
+	max-width: 1280px;
 	height: 100%;
 	padding: 0 50px;
 }
 
-.s-header a {
-	color: white;
-	text-decoration: none;
+.s-header .s-menu {
+	width: 100%;
+	height: 100%;
 }
 
 .s-header .s-menu .s-sub-container {
@@ -127,16 +146,14 @@ body {
 .s-header .s-logo h1 {
 	font-size: 24pt;
 	font-weight: bold;
-	padding: 0;
-	padding-top: 18px;
-	margin: 0;
+	padding: 14px 0 0 0;
 }
 
 .s-header .s-menu nav {
-	text-align: right;
 	width: 85%;
 	float: left;
-	height: 72px;
+	height: 100%;
+	text-align: right;
 }
 
 .s-header .s-menu .s-menu-btn {
@@ -161,10 +178,9 @@ body {
 	padding: 0;
 }
 
-.s-header .s-menu nav ul {
+.s-header .s-menu nav > ul {
 	list-style-type: none;
-	margin: 0;
-	padding: 0;
+	height: 100%;
 }
 
 .s-header .s-menu nav ul li {
@@ -175,11 +191,12 @@ body {
 	cursor: pointer;
 	position: relative;
 	transition: background 0.5s;
+	padding: 22px 30px;
 }
 
-.s-header .s-menu nav ul li,
-.s-header .s-menu nav ul li ul li {
-	padding: 21px 30px;
+.s-header .s-menu nav ul > li
+{
+	height: 72px;
 }
 
 .s-header .s-menu nav ul li:hover {
@@ -213,9 +230,10 @@ body {
 .s-header .s-menu nav ul li ul li {
 	display: block;
 	color: white;
+	height: auto;
 }
 
-.s-header .s-menu nav ul li ul li:hover > a {
+.s-header .s-menu nav ul li ul li:hover a {
 	color: white;
 }
 
@@ -240,20 +258,20 @@ body {
 	}
 
 	.s-header .s-menu nav {
-		display: none;
-		clear: both;
 		height: auto;
 		width: 100%;
 		text-align: left;
 	}
 
 	.s-header .s-menu nav ul {
-		max-height: 500px;
+		display: none;
+		max-height: 0;
 		overflow: auto;
 	}
 
-	.s-header .s-menu nav ul li {
+	.s-header .s-menu nav ul > li {
 		width: 100%;
+		height: 100%;
 		padding-left: 50px;
 	}
 
@@ -265,6 +283,10 @@ body {
 		max-height: none;
 		opacity: 1;
 		text-align: left;
+	}
+
+	.s-header .s-menu nav ul li ul li {
+		height: 72px;
 	}
 
 	.s-header .s-menu nav ul li:hover ul {
@@ -288,31 +310,29 @@ body {
 	width: 100%;
 	height: 100vh;
 	overflow: hidden;
+}
+
+.s-jumbotron .s-hero-bgr {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	z-index: 1;
 	background: black;
 }
 
-.s-jumbotron #s-hero,
 .s-jumbotron .s-hero {
-	position: fixed;
-	width: 100%;
-	height: 100vh;
-	opacity: 0.6;
-}
-
-.hero-bgr {
-	background-size: cover;
-	-moz-background-size: cover;
-	-webkit-background-size: cover;
-	background-repeat: no-repeat;
-	background-position: center top;
 	width: 100%;
 	height: 100%;
+	opacity: 1;
 }
 
 .s-jumbotron .s-heading {
-	position: relative;
+	position: absolute;
 	width: 100%;
 	height: 100%;
+	top: 0;
+	z-index: 100;
 }
 
 .s-jumbotron .s-heading .wrapper {
@@ -468,8 +488,6 @@ body {
 .s-main .s-content .s-img {
 	width: 38.19999%;
 	background-size: cover;
-	-moz-background-size: cover;
-	-webkit-background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center center;
 }
@@ -612,10 +630,5 @@ body {
 }
 
 .content-selector {
-	position: fixed;
-	left: 10px;
-	top: 0;
-	width: 200px;
-	height: 100vh;
-	z-index: 9999;
+	color: white;
 }

@@ -1,12 +1,17 @@
-function DynamicHeader(wrapperElement, targetElement, data) {
+//
+// This sets up a header which fades away after a certain amount of time and fades in
+// if the user scrolls up or if the mouse hovers over it.
+//
+function setupDynamicHeader( wrapperElement, targetElement, opts ) 
+{
 	var wrapperElement = wrapperElement,
 		targetElement = targetElement,
 
-		timeWait = data['wait'],
-		timeFadeIn = data['fadeIn'],
-		timeFadeOut = data['fadeOut'],
+		timeWait = opts.wait,
+		timeFadeIn = opts.fadeIn,
+		timeFadeOut = opts.fadeOut,
 
-		mobile = data['mobile'],
+		mobile = opts.mobile,
 		stop = false,
 
 		lastScrollTop,
@@ -20,32 +25,30 @@ function DynamicHeader(wrapperElement, targetElement, data) {
 		fadingOut = false,
 		fadingIn = false;
 
-	function init() {
+	function init() 
+	{
 		checkSize();
 		lastScrollTop = getScrollTop();
 		fadeOut();
 	}
 
-	function getScrollTop() {
-		return $(window).scrollTop();
+	function getScrollTop() 
+	{
+		return $( window ).scrollTop();
 	}
 
-	function viewport() {
-		var e = window, a = 'inner';
-		if (!('innerWidth' in window )) {
-		    a = 'client';
-		    e = document.documentElement || document.body;
-		}
-		return { width : e[ a+'Width' ] , height : e[ a+'Height' ] };
-	}
-
-	function checkSize() {
-		if(viewport()['width'] <= mobile) {
-			if(!stop) {
-				targetElement.css({
+	function checkSize() 
+	{
+		if( viewport().width <= mobile ) 
+		{
+			if( !stop ) 
+			{
+				targetElement.css(
+				{
 					"opacity" : "1",
 					"display" : "block"
 				});								
+
 				clearTimers();
 			}
 
@@ -53,46 +56,60 @@ function DynamicHeader(wrapperElement, targetElement, data) {
 			targetElement.stop();
 			targetElement.show();
 		}
-		else {
-			if(stop) {
-				targetElement.css({
+		else 
+		{
+			if( stop ) 
+			{
+				targetElement.css(
+				{
 					"opacity" : "1",
 					"display" : "block"
 				});	
 			}
+
 			stop = false;
 			fadeOut();
 		}
 	}
 
-	function clearTimers() {
-		clearTimeout(waitTimer);
+	function clearTimers() 
+	{
+		clearTimeout( waitTimer );
 	}
 
-	function fadeIn() {
-		if(stop) return;
+	function fadeIn() 
+	{
+		if( stop ) return;
 
-		if(fadingOut || waiting) {
-			clearTimeout(waitTimer);
+		if( fadingOut || waiting ) 
+		{
+			clearTimeout( waitTimer );
 			fadingOut = false;
 			targetElement.stop();
 		}
 
-		targetElement.fadeIn(timeFadeIn, function() {
+		targetElement.fadeIn(timeFadeIn, function() 
+		{
 			fadeOut();
 		});
 	}
 
-	function fadeOut() {
-		if (stop) return;
+	function fadeOut() 
+	{
+		if ( stop ) return;
 
 		clearTimeout(waitTimer);
 		waiting = true;
-		waitTimer = setTimeout(function() {
-			if(!mouseover) {
+
+		waitTimer = setTimeout(function() 
+		{
+			if( !mouseover ) 
+			{
 				targetElement.stop();
 				fadingOut = true;
-				targetElement.fadeOut(timeFadeOut, function() {
+
+				targetElement.fadeOut( timeFadeOut, function() 
+				{
 					fadingOut = false;
 				});
 			}
@@ -101,27 +118,36 @@ function DynamicHeader(wrapperElement, targetElement, data) {
 		}, timeWait);
 	}
 
-	// main jquery
-	$(function() {
+	//
+	// main
+	//
+	$( function() 
+	{
 		init();
 
-		$(window).resize(function() {
+		$( window ).resize( function() 
+		{
 			checkSize();
 		});
 
-		$(window).scroll(function() {
-			if(lastScrollTop > getScrollTop()) {
+		$( window ).scroll( function() 
+		{
+			if( lastScrollTop > getScrollTop()) 
+			{
 				fadeIn();
 			}
 
 			lastScrollTop = getScrollTop();
 		});
 
-		wrapperElement.hover(function() {
+		wrapperElement.hover( function() 
+		{
 			fadeIn();
 
 			mouseover = true;
-		}, function() {
+		}, 
+		function() 
+		{
 			fadeOut();
 
 			mouseover = false;

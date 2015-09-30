@@ -1,133 +1,12 @@
-function ParallaxObject(el, scrollData, opacityData) {
-	var _ = this;
+//---------------------------------------------
+//
+// html data attributes:
+// data-parallax-img-src		[ filename ]
+// data-parallax-height			[ integer ]
+// data-parallax-speed			[ between 0.0 and 1.0 ]
+//
+//---------------------------------------------	
 
-	init();
-
-	function init() {
-		_.el = el;
-
-		if(scrollData != null) {
-			_.scrollEnabled = true;
-			 // store input scroll data for later use
-			_.scrollDataInitTop = scrollData['init'],
-			_.scrollDataStepRange = scrollData['range'],
-			_.scrollDataStepValue = scrollData['value'],
-
-			// processed data
-			_.scrollInitTop = evaluateData(_.scrollDataInitTop),
-			_.scrollStepRange = evaluateData(_.scrollDataStepRange),
-			_.scrollStepValue = evaluateData(_.scrollDataStepValue),
-			_.scrollRatio = calcRatio(_.scrollStepRange, _.scrollStepValue);
-		}
-		else {
-			_.scrollEnabled = false;
-		}
-
-		if(opacityData != null) {
-			_.opacityEnabled = true;
-			// store input opacity data for later use
-			_.opacityDataInit = opacityData['init'],
-			_.opacityDataEnd = opacityData['end'],
-			_.opacityDataStepRange = opacityData['range'],
-			_.opacityDataStepValue = opacityData['value'],
-			// processed data
-			_.opacityInit = _.opacityDataInit,
-			_.opacityEnd = _.opacityDataEnd,
-			_.opacityDiff = _.opacityInit - _.opacityEnd,
-			_.opacityStepRange = evaluateData(_.opacityDataStepRange),
-			_.opacityStepValue = evaluateData(_.opacityDataStepValue),
-			_.opacityRatio = calcRatio(_.opacityStepRange, _.opacityStepValue);	
-		}
-		else {
-			_.opacityEnabled = false;
-		}
-	}
-
-	function evaluateData(value) {
-		if(value.indexOf("px") != -1) {
-			var str = value.substring(0, value.indexOf("px"));
-			pixels = new Number(str);
-			return pixels;
-		}
-		else if(value.indexOf("%") != -1) {
-			var str = value.substring(0, value.indexOf("%"));
-			percent = new Number(str);
-			var pixels = viewport()['height'] * (percent / 100);
-			return pixels;
-		}
-		else {
-			return 0;
-		}
-	}
-
-	function calcRatio(range, value) {
-		if (range != 0 && value != 0) {
-			var ratio = value / range;
-			return ratio;
-		}
-		else {
-			return 0;
-		}
-	}
-
-	function getScrollTop() {
-		return $(window).scrollTop();
-	}
-
-	function calcTop() {
-		var newTop = _.scrollInitTop + getScrollTop() * _.scrollRatio;
-		el.css({top: newTop + "px"});
-	}
-
-	function calcOpacity() {
-		var scrollPos = getScrollTop() - _.scrollInitTop;
-		if(scrollPos >= 0) {
-			var factor =  (scrollPos / _.opacityStepRange) * _.opacityRatio;
-			var newOpacity = (_.opacityInit - (factor * _.opacityDiff));
-			el.css({opacity: newOpacity});		
-		}
-		else {
-			el.css({opacity: _.opacityInit});
-		}
-	}
-
-	$(function() {
-		calcTop();
-		calcOpacity();
-		
-		$(window).resize(function() {
-			if(_.scrollEnabled) {
-				_.scrollInitTop = evaluateData(_.scrollDataInitTop);
-				_.scrollStepRange = evaluateData(_.scrollDataStepRange);
-				_.scrollStepValue = evaluateData(_.scrollDataStepValue);
-			}
-			
-			if(_.opacityEnabled) {
-				_.opacityStepRange = evaluateData(_.opacityDataStepRange);
-				_.opacityStepValue = evaluateData(_.opacityDataStepValue);
-			}
-		});
-
-		$(window).scroll(function() {
-			calcTop();
-			calcOpacity();
-		});
-	});
-}
-
-function Parallax() {
-	var objects = [];
-
-	this.add = function(object) {
-		objects.push(object);
-	}
-
-	this.scroll = function() {
-		for (var i = 0; i < objects.length; i++) {
-			objects[i].scroll();
-		}
-	}
-}
 
 ( function( $ )
 {
@@ -135,30 +14,194 @@ function Parallax() {
 	{
 		var _ = this;
 
-		_.opts = 
-		{
-			scrollData :
-			{
+		_.speed = 0.0;
 
+		_.init = function( el )
+		{
+			_.container = el;
+
+			//
+			// get speed from data-speed
+			//
+			var speed = _.container.data( "parallax-speed" );
+			if( speed != null )
+				_.speed = parseFloat( speed );
+
+			setupHtml();
+			setupUpdate();
+
+			return _;
+		}
+
+		function setupHtml()
+		{
+			//
+			// add container
+			//
+			_.container.addClass( "parallax-container" );
+
+			//
+			// add parallax
+			//
+			_.parallax = $( "<div></div>" );
+			_.parallax.addClass( "parallax-parallax" );
+
+			//
+			// attach image from data-prallax-img-src to parallax
+			//
+			var imgSrc = _.container.data( "parallax-img-src" );
+			if( imgSrc != null )
+			{
+				_.parallax.css(
+					{
+						"background": 			"url(" + imgSrc + ") no-repeat"
+					}
+				);
 			}
 
-			opacityData :
+			//
+			// attach height from data-parallax-height to parallax
+			//
+			_.heightData = _.container.data( "parallax-height" );
+
+			//
+			// prepend parallax to container
+			//
+			_.container.prepend( _.parallax );
+
+			//
+			// assign container height
+			//
+			_.ch = _.container.height();
+		}
+
+		function evaluateHeightData( value ) 
+		{
+			if( value.indexOf( "px" ) != -1 ) 
 			{
-				
+				var str = value.substring( 0, value.indexOf( "px" ));
+				px = new Number( str );
+				return px;
+			}
+			else if( value.indexOf( "vh" ) != -1 ) 
+			{
+				var str = value.substring( 0, value.indexOf( "vh" ));
+				vh = new Number( str );
+				var px = viewport().height * ( vh / 100 );
+				return px;
+			}
+			else if( value.indexOf( "%" ) != -1 )
+			{
+				var str = value.substring( 0, value.indexOf( "%" ));
+				percent = new Number( str );
+				var px = _.container.height() * ( percent / 100 ); 
+				return px;
+			}
+			else 
+			{
+				return 0;
 			}
 		}
 
-		_.init = function( el, opts )
+		function updateHtml()
 		{
-			_.el = el;
-			_.opts.extends( opts );
+			if( _.heightData != null )
+			{
+				var height = evaluateHeightData( _.heightData );
+
+				_.parallax.css(
+					{
+						"height": height
+					 }
+				);
+
+				_.ph = height;					// if height is set -> assign ph to height
+			}
+			else
+			{
+				_.ph = _.container.height();	// if height is NOT set -> assign ph to the container height
+			}
+		}
+
+		function updateValues()
+		{
+			var vh = viewport().height;
+
+			//
+			// parallax height greater than vh -> there's no minimum speed
+			//
+			if( _.ph >= vh )
+			{
+				_.r = _.speed;
+			}
+
+			//
+			// parallax height less than vh -> must calculate minimum speed
+			//
+			else
+			{
+				_.c0 = vh - _.ch;
+				_.p0 = vh - _.ph;
+
+				var diff = _.c0 - _.p0;
+				_.p0 += _.speed * diff;
+
+				if( _.p0 == 0 )		// protect from division with 0
+				{
+					_.r = 0;
+				}
+				else
+				{
+					_.r =  _.p0 / _.c0;
+				}
+
+				if( _.r < 0 ) _.r = 0;
+			}
+		}
+
+		function updatePosition()
+		{
+			//
+			// get the scroll-top-position and the top-position of the container
+			//
+			var vt = $( window ).scrollTop();
+	 		var ct = _.container.offset().top;
+
+	 		//
+	 		// calculate position of the fixed parallax div
+	 		//
+	 		var yPos = ( ct - vt ) * _.r;
+
+	 		//
+	 		// set css
+	 		//
+	 		_.parallax.css(
+	 			{
+	 				"top": yPos + "px"
+	 			}
+ 			);
+		}
+
+		function setupUpdate()
+		{
+			updateHtml();
+			updateValues();
+			updatePosition();
+
+			$( window ).resize( function()
+			{
+					updateHtml();
+					updateValues();
+			});
+
+			$( window ).scroll( updatePosition );
 		}
 	}
 
 	//
 	// register as jQuery funtion
 	//
-	$.fn.parallax = function( el, opts )
+	$.fn.parallax = function()
 	{
 		var len = this.length;
 
@@ -166,10 +209,7 @@ function Parallax() {
 		{
 			var me = $( this )
 				key = "parralax" + ( len > 1 ? '-' + ++index : '' ),
-				instance = ( new Parallax ).init( 
-					me,
-					opts 
-				);
+				instance = ( new Parallax ).init( me );
 
 			me.data( 'key', key );
 		} );
