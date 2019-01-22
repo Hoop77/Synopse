@@ -1,2 +1,2 @@
 # Synopse
-HTML5 Web-Project
+Static HTML5 website, presenting an overview and information about different epochs in art.
